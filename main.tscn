@@ -1,8 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://c6hln7gwll4gm"]
+[gd_scene load_steps=4 format=3 uid="uid://c6hln7gwll4gm"]
 
-[ext_resource type="PackedScene" uid="uid://2ny0y48pn0s3" path="res://Ship/ship.tscn" id="1_xftpn"]
+[ext_resource type="Script" path="res://main.gd" id="1_kvm04"]
+[ext_resource type="Texture2D" uid="uid://ctdvejn1o26l8" path="res://Ship/water.jpg" id="2_aytxw"]
+[ext_resource type="PackedScene" uid="uid://2ny0y48pn0s3" path="res://Ship/Ship.tscn" id="3_l1whv"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_kvm04")
 
-[node name="Ship" parent="." instance=ExtResource("1_xftpn")]
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.666667, 0.705882, 0.729412, 1)
+position = Vector2(566, 287)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_aytxw")
+
+[node name="Ship" parent="." instance=ExtResource("3_l1whv")]
 position = Vector2(545, 283)
+
+[node name="Guide" type="Label" parent="."]
+offset_left = 56.0
+offset_top = 22.0
+offset_right = 326.0
+offset_bottom = 196.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Arrow keys to control
+Up: forward
+Down: backward
+Left and right: rotation
+R key: reset ship position"
