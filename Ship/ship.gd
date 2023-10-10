@@ -10,6 +10,7 @@ extends CharacterBody2D
 
 # Initial direction where ship is positioned
 var movement_direction
+var crash = false
 var last_rotation_direction = 0
 
 func _ready():
@@ -21,7 +22,10 @@ func _physics_process(delta):
 	# Move towards where facing
 	if propell_forward: # We move in the last direction that we looked at, either in positive (forward) or negative (backwards)
 		velocity += movement_direction * propell_forward * acceleration * delta
-		velocity = velocity.limit_length(max_speed)
+		if !crash:
+			velocity = velocity.limit_length(max_speed)
+		else:
+			velocity = velocity.limit_length(40.0)
 	else: # Over time if no input slow down the ship
 		if velocity.length() > (friction * delta):
 			velocity -= velocity.normalized() * (deceleration * delta)
@@ -33,7 +37,10 @@ func _physics_process(delta):
 	# Rotate in the pressed direction (CONSTANT SPEED, IMMEDIATE STOP)
 	if rotation_direction:
 		last_rotation_direction = rotation_direction
-		rotation += rotation_direction * rotational_acceleration(rotation_speed, delta) * delta
+		if !crash:
+			rotation += rotation_direction * rotational_acceleration(rotation_speed, max_rotational_velocity, delta) * delta
+		else:
+			rotation += rotation_direction * rotational_acceleration(rotation_speed, 0.2, delta) * delta
 		movement_direction = Vector2.from_angle(rotation)
 	else:
 		if rotation_speed > 0.1:
@@ -47,7 +54,7 @@ func _physics_process(delta):
 	move_and_slide()
 
 
-func rotational_acceleration(curr_vel, delta):
+func rotational_acceleration(curr_vel, max_rotational_velocity, delta):
 	if curr_vel > max_rotational_velocity:
 		return max_rotational_velocity
 	else:
@@ -59,3 +66,10 @@ func rotational_deceleration(curr_vel, delta):
 	rotation_speed = curr_vel - rotation_speed * delta
 	#print(rotation_speed)
 	return curr_vel
+
+
+func _on_area_2d_body_entered(_body):
+	crash = true
+
+func _on_area_2d_body_exited(body):
+	crash = false
