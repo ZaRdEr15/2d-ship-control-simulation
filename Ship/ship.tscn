@@ -3,8 +3,9 @@
 [ext_resource type="Script" path="res://Ship/ship.gd" id="1_a5wr5"]
 [ext_resource type="Texture2D" uid="uid://bw0xjpqy7rktg" path="res://Ship/ship (1).png" id="2_teu34"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hlfpb"]
-size = Vector2(96, 48)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rifds"]
+radius = 13.0
+height = 90.0
 
 [node name="Ship" type="CharacterBody2D"]
 rotation = 1.5708
@@ -19,4 +20,5 @@ texture = ExtResource("2_teu34")
 flip_v = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_hlfpb")
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_rifds")
