@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://2ny0y48pn0s3"]
 
-[ext_resource type="Script" path="res://Ship/ship.gd" id="1_a5wr5"]
+[ext_resource type="Script" path="res://Ship/Ship.gd" id="1_n8ijq"]
 [ext_resource type="Texture2D" uid="uid://bw0xjpqy7rktg" path="res://Ship/ship (1).png" id="2_teu34"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rifds"]
@@ -13,7 +13,8 @@ height = 94.0
 
 [node name="Ship" type="CharacterBody2D"]
 rotation = 1.5708
-script = ExtResource("1_a5wr5")
+motion_mode = 1
+script = ExtResource("1_n8ijq")
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

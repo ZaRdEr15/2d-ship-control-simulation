@@ -9,12 +9,13 @@ extends CharacterBody2D
 @export var max_rotational_velocity = 0.8
 
 # Initial direction where ship is positioned
-var movement_direction
+var movement_direction = Vector2(0, 0)
 var crash = false
 var last_rotation_direction = 0
 
 func _ready():
 	rotation_degrees = -90
+	movement_direction = Vector2.from_angle(rotation)
 
 func _physics_process(delta):
 	# Save which input is pressed, can't allow to press both inputs at the same time
@@ -46,30 +47,25 @@ func _physics_process(delta):
 		if rotation_speed > 0.1:
 			rotation += last_rotation_direction * rotational_deceleration(rotation_speed, delta) * delta
 			movement_direction = Vector2.from_angle(rotation)
-		else:
-			rotation = rotation
-			movement_direction = Vector2.from_angle(rotation)
+		
 	
-	#print(rotation_speed)
 	move_and_slide()
 
 
-func rotational_acceleration(curr_vel, max_rotational_velocity, delta):
-	if curr_vel > max_rotational_velocity:
-		return max_rotational_velocity
+func rotational_acceleration(curr_vel, max_velocity, delta):
+	if curr_vel > max_velocity:
+		return max_velocity
 	else:
 		rotation_speed = curr_vel + rotation_speed * delta
-		#print(rotation_speed)
 		return curr_vel
 		
 func rotational_deceleration(curr_vel, delta):
 	rotation_speed = curr_vel - rotation_speed * delta
-	#print(rotation_speed)
 	return curr_vel
 
 
 func _on_area_2d_body_entered(_body):
 	crash = true
 
-func _on_area_2d_body_exited(body):
+func _on_area_2d_body_exited(_body):
 	crash = false
