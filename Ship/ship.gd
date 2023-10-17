@@ -14,6 +14,7 @@ var config = ConfigFile.new()
 var movement_direction = Vector2(0, 0)
 var crash = false
 var last_rotation_direction = 0
+var rotation_direction_change = false
 
 func _ready():
 	rotation_degrees = -90
@@ -22,22 +23,7 @@ func _ready():
 
 func _physics_process(delta):
 	ship_movement(delta)
-	
-	var rotation_direction = Input.get_axis("turn_left", "turn_right")
-	# Rotate in the pressed direction (CONSTANT SPEED, IMMEDIATE STOP)
-	if rotation_direction:
-		last_rotation_direction = rotation_direction
-		if !crash:
-			rotation += rotation_direction * rotational_acceleration(rotation_speed, max_rotational_velocity, delta) * delta
-		else:
-			rotation += rotation_direction * rotational_acceleration(rotation_speed, 0.2, delta) * delta
-		movement_direction = Vector2.from_angle(rotation)
-	else:
-		if rotation_speed > 0.1:
-			rotation += last_rotation_direction * rotational_deceleration(rotation_speed, delta) * delta
-			movement_direction = Vector2.from_angle(rotation)
-		
-	
+	ship_rotation(delta)
 	move_and_slide()
 
 func ship_movement(delta):
@@ -55,6 +41,31 @@ func ship_movement(delta):
 			velocity -= velocity.normalized() * (deceleration * delta)
 		else: # Stop the ship when fully slowed down
 			velocity = Vector2.ZERO
+			
+func ship_rotation(delta):
+	var rotation_direction = Input.get_axis("turn_left", "turn_right")
+	# Rotate in the pressed direction
+	if rotation_direction:
+		# If you press other direction of rotation, start slowing down, before back to maximum speed
+		if rotation_direction != last_rotation_direction and rotation_direction_change == false:
+			rotation_direction_change = true
+		last_rotation_direction = rotation_direction # save last rotation to remember turn
+		if rotation_direction_change == false:
+			if !crash:
+				rotation += rotation_direction * rotational_acceleration(rotation_speed, max_rotational_velocity, delta) * delta
+			else:
+				rotation += rotation_direction * rotational_acceleration(rotation_speed, 0.2, delta) * delta
+		else: # start slowing down until back to basic speed
+			if rotation_speed > 0.1:
+				rotation += rotation_direction * rotational_deceleration(rotation_speed * 0.95, delta) * delta
+			else:
+				rotation_direction_change = false
+	else: # continue movement of rotation when no input
+		if rotation_speed > 0.1:
+			rotation += last_rotation_direction * rotational_deceleration(rotation_speed, delta) * delta
+	movement_direction = Vector2.from_angle(rotation)
+
+	print(rotation_speed)
 
 func rotational_acceleration(curr_vel, max_velocity, delta):
 	if curr_vel > max_velocity:
