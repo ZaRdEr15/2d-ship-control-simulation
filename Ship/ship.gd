@@ -158,6 +158,8 @@ func _on_end_of_file_reached():
 	is_playback = false
 	var label = get_parent().get_node("Playback")
 	label.visible = false
+	var main = get_parent()
+	main.playback_pressed = false
 
 func _on_area_2d_body_entered(_body):
 	crash = true

@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://c6hln7gwll4gm"]
+[gd_scene load_steps=13 format=3 uid="uid://c6hln7gwll4gm"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_jttjc"]
+[ext_resource type="Script" path="res://Server.gd" id="2_wkuhp"]
 [ext_resource type="Texture2D" uid="uid://clltpiiwq0rjy" path="res://Ship/tiles_sheet.png" id="3_1p8b7"]
 [ext_resource type="PackedScene" uid="uid://2ny0y48pn0s3" path="res://Ship/Ship.tscn" id="3_l1whv"]
 [ext_resource type="PackedScene" uid="uid://qqeu7clwwhmg" path="res://Ship/ForeignShip.tscn" id="3_shqxb"]
@@ -293,6 +294,9 @@ pattern_1 = SubResource("TileMapPattern_liqqx")
 [node name="Main" type="Node2D"]
 script = ExtResource("1_jttjc")
 
+[node name="Server" type="Node2D" parent="."]
+script = ExtResource("2_wkuhp")
+
 [node name="Ship" parent="." instance=ExtResource("3_l1whv")]
 position = Vector2(545, 283)
 
@@ -338,7 +342,7 @@ R key: reset ship position
 3: moving ships map
 Tab: toggle parameter sliders visibility
 O key: start/stop recording movement
-P key: playback movement from save file"
+P key: play/stop movement from save file"
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_jl0dq")
