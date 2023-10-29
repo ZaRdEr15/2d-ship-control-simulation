@@ -342,7 +342,8 @@ R key: reset ship position
 3: moving ships map
 Tab: toggle parameter sliders visibility
 O key: start/stop recording movement
-P key: play/stop movement from save file"
+P key: play/stop movement from save file
+T key: toggle wind force"
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_jl0dq")
@@ -498,9 +499,31 @@ step = 0.01
 value = 0.05
 scrollable = false
 
+[node name="Weight" type="Label" parent="ShipParameters"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 110.0
+offset_top = 308.0
+offset_right = 165.0
+offset_bottom = 334.0
+text = "Weight"
+
+[node name="WeightSlider" type="HSlider" parent="ShipParameters"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 330.0
+offset_right = 255.0
+offset_bottom = 353.0
+focus_mode = 0
+min_value = 1.0
+max_value = 2.2
+step = 0.1
+value = 1.0
+
 [connection signal="value_changed" from="ShipParameters/MaxSpeedSlider" to="Ship" method="_on_max_speed_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/AccelerationSlider" to="Ship" method="_on_acceleration_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/DecelerationSlider" to="Ship" method="_on_deceleration_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/RotationSpeedSlider" to="Ship" method="_on_rotation_speed_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/FrictionSlider" to="Ship" method="_on_friction_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/MaxRotationalVelocitySlider" to="Ship" method="_on_max_rotational_velocity_slider_value_changed"]
+[connection signal="value_changed" from="ShipParameters/WeightSlider" to="Ship" method="_on_weight_slider_value_changed"]

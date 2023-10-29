@@ -1,12 +1,21 @@
 extends CharacterBody2D
 
-# Initial parameters for ship movement
-var max_speed = 150.0
-var acceleration = 400.0
-var deceleration = 100.0
-var rotation_speed = 0.1
-var friction = 150.0
-var max_rotational_velocity = 0.8
+# Initial parameters for ship movement (connected with sliders)
+var weight = 1
+var max_speed = 150.0 / weight
+var acceleration = 400.0 / weight
+var deceleration = 100.0 * weight
+var rotation_speed = 0.1 # ONLY VARIABLE WHICH CHANGES BY CONTROLLING!!
+var friction = 150.0 * weight
+var max_rotational_velocity = 0.8 / weight
+
+const ROTATION_SPEED_STOP = 0.1
+const WIND_DIRECTION_DEG = -90 # -90 is up direction
+const WIND_POWER = 10
+
+var crash_coeff = 0.25
+
+var wind_vector = Vector2(0, 0)
 
 var config = ConfigFile.new()
 
@@ -16,6 +25,7 @@ var movement_direction = Vector2(0, 0) # Initial direction where ship is positio
 var crash = false
 var last_rotation_direction = 0
 var rotation_direction_change = false
+var rotation_before_stop = 0
 
 var input_file : FileAccess
 var is_recording = false
@@ -23,7 +33,9 @@ var is_playback = false
 
 func _ready():
 	rotation_degrees = -90
+	set_scale(Vector2(weight, weight)) # Changes size and parameters of the ship
 	movement_direction = Vector2.from_angle(rotation)
+	create_cfg()
 	ship_parameter_init()
 	var emitter = get_parent() # Main node
 	emitter.record_input.connect(_on_record_pressed)
@@ -50,13 +62,13 @@ func ship_movement(delta):
 		if !crash:
 			velocity = velocity.limit_length(max_speed)
 		else:
-			velocity = velocity.limit_length(40.0)
+			velocity = velocity.limit_length(max_speed * crash_coeff)
 	else: # Over time if no input slow down the ship
 		if velocity.length() > (friction * delta):
 			velocity -= velocity.normalized() * (deceleration * delta)
 		else: # Stop the ship when fully slowed down
 			velocity = Vector2.ZERO
-			
+	
 func ship_rotation(delta):
 	var rotation_direction = Input.get_axis("turn_left", "turn_right")
 	# Rotate in the pressed direction
@@ -70,23 +82,26 @@ func ship_rotation(delta):
 		# If you press other direction of rotation, start slowing down, before back to maximum speed
 		if rotation_direction != last_rotation_direction and rotation_direction_change == false:
 			rotation_direction_change = true
+			rotation_before_stop = last_rotation_direction
 		last_rotation_direction = rotation_direction # save last rotation to remember turn
 		if rotation_direction_change == false:
 			if !crash:
 				rotation += rotation_direction * rotational_acceleration(rotation_speed, max_rotational_velocity, delta) * delta
 			else:
-				rotation += rotation_direction * rotational_acceleration(rotation_speed, 0.2, delta) * delta
+				rotation += rotation_direction * rotational_acceleration(rotation_speed, max_rotational_velocity * crash_coeff, delta) * delta
 		else: # start slowing down until back to basic speed
-			if rotation_speed > 0.1:
-				rotation += rotation_direction * rotational_deceleration(rotation_speed * 0.95, delta) * delta
+			if rotation_speed > ROTATION_SPEED_STOP:
+				rotation += rotation_before_stop * rotational_deceleration(rotation_speed, delta) * delta
 			else:
 				rotation_direction_change = false
 	else: # continue movement of rotation when no input
-		if rotation_speed > 0.1:
+		if rotation_speed > ROTATION_SPEED_STOP:
 			rotation += last_rotation_direction * rotational_deceleration(rotation_speed, delta) * delta
 	movement_direction = Vector2.from_angle(rotation)
 
-	#print(rotation_speed)
+#	print(rotation_speed)
+#	print(rotation_direction)
+#	print(rotation_direction_change)
 
 func rotational_acceleration(curr_vel, max_velocity, delta):
 	if curr_vel > max_velocity:
@@ -98,17 +113,26 @@ func rotational_acceleration(curr_vel, max_velocity, delta):
 func rotational_deceleration(curr_vel, delta):
 	rotation_speed = curr_vel - rotation_speed * delta
 	return curr_vel
+	
+func create_cfg():
+	if FileAccess.file_exists("user://ship.cfg"):
+		return
+	else:
+		config.set_value("Ship_Parameters", "weight", weight)
+		config.set_value("Ship_Parameters", "max_speed", max_speed)
+		config.set_value("Ship_Parameters", "acceleration", acceleration)
+		config.set_value("Ship_Parameters", "deceleration", deceleration)
+		config.set_value("Ship_Parameters", "rotation_speed", rotation_speed)
+		config.set_value("Ship_Parameters", "friction", friction)
+		config.set_value("Ship_Parameters", "max_rotational_velocity", max_rotational_velocity)
+		config.save("user://ship.cfg")
 
 func ship_parameter_init():
-	var err = config.load("res://Ship/ship.cfg")
+	var err = config.load("user://ship.cfg")
 	if err != OK:
 		return
-	max_speed = config.get_value("Ship_Parameters", "max_speed")
-	acceleration = config.get_value("Ship_Parameters", "acceleration")
-	deceleration = config.get_value("Ship_Parameters", "deceleration")
-	rotation_speed = config.get_value("Ship_Parameters", "rotation_speed")
-	friction = config.get_value("Ship_Parameters", "friction")
-	max_rotational_velocity = config.get_value("Ship_Parameters", "max_rotational_velocity")
+	weight = config.get_value("Ship_Parameters", "weight")
+	recalculate_parameters()
 	
 func record_input(input_matching, input1, input2):
 	if is_recording:
@@ -160,6 +184,14 @@ func _on_end_of_file_reached():
 	label.visible = false
 	var main = get_parent()
 	main.playback_pressed = false
+	
+func recalculate_parameters():
+	max_speed = config.get_value("Ship_Parameters", "max_speed") / weight
+	acceleration = config.get_value("Ship_Parameters", "acceleration") / weight
+	deceleration = config.get_value("Ship_Parameters", "deceleration") / weight
+	rotation_speed = config.get_value("Ship_Parameters", "rotation_speed")
+	friction = config.get_value("Ship_Parameters", "friction") * weight
+	max_rotational_velocity = config.get_value("Ship_Parameters", "max_rotational_velocity") / weight
 
 func _on_area_2d_body_entered(_body):
 	crash = true
@@ -190,3 +222,9 @@ func _on_friction_slider_value_changed(value):
 
 func _on_max_rotational_velocity_slider_value_changed(value):
 	max_rotational_velocity = value
+
+
+func _on_weight_slider_value_changed(value):
+	weight = value
+	set_scale(Vector2(weight, weight))
+	recalculate_parameters()

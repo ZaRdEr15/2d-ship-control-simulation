@@ -43,4 +43,4 @@ func _process(_delta):
 			print("[", client_address, ":", client_port, "]: ", msg)
 			
 func client_disconnected(address, port):
-	print("Client ", client.get_connected_host(), ":", client.get_connected_port(), " has disconnected!")
+	print("Client ", address, ":", port, " has disconnected!")
