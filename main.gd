@@ -31,14 +31,23 @@ func _process(_delta):
 		$Playback.visible = !$Playback.visible
 		emit_signal("playback_input")
 	elif Input.is_action_just_pressed("toggle_wind"):
+		$Wind.visible = !$Wind.visible
 		if is_wind_active:
 			$Ship.wind_vector = Vector2.ZERO
 		else:
-			var deg_to_rad = $Ship.WIND_DIRECTION_DEG * PI / 180
-			$Ship.wind_vector = Vector2.from_angle(deg_to_rad) * $Ship.WIND_POWER
+			calculate_wind_vector()
 		is_wind_active = !is_wind_active
 		
 
 func reset_ship_position():
+	$Ship.velocity = Vector2.ZERO
+	$Ship.rotation_velocity = 0.0
 	$Ship.position = starting_position
 	$Ship.rotation_degrees = -90
+	
+func calculate_wind_vector():
+	$Ship.wind_vector = Vector2.from_angle(deg_to_rad($Ship.WIND_DIRECTION_DEG)) * $Ship.WIND_POWER / $Ship.weight
+
+func _on_weight_slider_value_changed(_value):
+	if is_wind_active:
+		calculate_wind_vector()

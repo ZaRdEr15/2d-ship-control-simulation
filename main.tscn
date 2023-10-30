@@ -300,6 +300,15 @@ script = ExtResource("2_wkuhp")
 [node name="Ship" parent="." instance=ExtResource("3_l1whv")]
 position = Vector2(545, 283)
 
+[node name="Wind" type="Label" parent="."]
+visible = false
+modulate = Color(0, 0, 0, 1)
+offset_left = 442.0
+offset_top = 4.0
+offset_right = 636.0
+offset_bottom = 30.0
+text = "Constant wind vector ON"
+
 [node name="Recording" type="Label" parent="."]
 visible = false
 modulate = Color(0, 0, 0, 1)
@@ -439,7 +448,7 @@ offset_left = 90.0
 offset_top = 143.0
 offset_right = 207.0
 offset_bottom = 169.0
-text = "Rotation speed"
+text = "Rotation speed (REMOVE!)"
 horizontal_alignment = 1
 
 [node name="RotationSpeedSlider" type="HSlider" parent="ShipParameters"]
@@ -526,4 +535,5 @@ value = 1.0
 [connection signal="value_changed" from="ShipParameters/RotationSpeedSlider" to="Ship" method="_on_rotation_speed_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/FrictionSlider" to="Ship" method="_on_friction_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/MaxRotationalVelocitySlider" to="Ship" method="_on_max_rotational_velocity_slider_value_changed"]
+[connection signal="value_changed" from="ShipParameters/WeightSlider" to="." method="_on_weight_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/WeightSlider" to="Ship" method="_on_weight_slider_value_changed"]

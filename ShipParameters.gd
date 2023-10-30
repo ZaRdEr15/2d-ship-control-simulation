@@ -12,6 +12,3 @@ func _ready():
 	$FrictionSlider.value = ship.friction
 	$MaxRotationalVelocitySlider.value = ship.max_rotational_velocity
 	
-func _process(_delta):
-	$RotationSpeedSlider.value = ship.rotation_speed
-	

@@ -5,24 +5,28 @@ var weight = 1
 var max_speed = 150.0 / weight
 var acceleration = 400.0 / weight
 var deceleration = 100.0 * weight
-var rotation_speed = 0.1 # ONLY VARIABLE WHICH CHANGES BY CONTROLLING!!
+var rotation_speed = 0.1 / weight # REMOVE ROTATION SPEED!! ADD ROTATION_ACCELERATION AND ROTATION_DECELERATION PARAMETERS
 var friction = 150.0 * weight
 var max_rotational_velocity = 0.8 / weight
 
-const ROTATION_SPEED_STOP = 0.1
-const WIND_DIRECTION_DEG = -90 # -90 is up direction
-const WIND_POWER = 10
+const WIND_DIRECTION_DEG = 0 # -90 up, 90 down, 0 right, 180 left
+const WIND_POWER = 100
 
 var crash_coeff = 0.25
 
-var wind_vector = Vector2(0, 0)
+var wind_vector = Vector2.ZERO
 
 var config = ConfigFile.new()
 
 signal end_of_file
 
-var movement_direction = Vector2(0, 0) # Initial direction where ship is positioned
+var calculated_velocity = Vector2.ZERO
+var movement_direction = Vector2.ZERO # Initial direction where ship is positioned
 var crash = false
+
+const ROTATION_STOP = 0.1
+
+var rotation_velocity = 0
 var last_rotation_direction = 0
 var rotation_direction_change = false
 var rotation_before_stop = 0
@@ -58,16 +62,17 @@ func ship_movement(delta):
 			propel_forward = playback_input("UP", "DOWN")
 	# Move towards where facing
 	if propel_forward: # We move in the last direction that we looked at, either in positive (forward) or negative (backwards)
-		velocity += movement_direction * propel_forward * acceleration * delta
+		calculated_velocity += movement_direction * propel_forward * acceleration * delta
 		if !crash:
-			velocity = velocity.limit_length(max_speed)
+			calculated_velocity = calculated_velocity.limit_length(max_speed)
 		else:
-			velocity = velocity.limit_length(max_speed * crash_coeff)
+			calculated_velocity = calculated_velocity.limit_length(max_speed * crash_coeff)
 	else: # Over time if no input slow down the ship
 		if velocity.length() > (friction * delta):
-			velocity -= velocity.normalized() * (deceleration * delta)
+			calculated_velocity -= calculated_velocity.normalized() * (deceleration * delta)
 		else: # Stop the ship when fully slowed down
-			velocity = Vector2.ZERO
+			calculated_velocity = Vector2.ZERO
+	velocity = calculated_velocity + wind_vector
 	
 func ship_rotation(delta):
 	var rotation_direction = Input.get_axis("turn_left", "turn_right")
@@ -83,35 +88,34 @@ func ship_rotation(delta):
 		if rotation_direction != last_rotation_direction and rotation_direction_change == false:
 			rotation_direction_change = true
 			rotation_before_stop = last_rotation_direction
+		
 		last_rotation_direction = rotation_direction # save last rotation to remember turn
 		if rotation_direction_change == false:
 			if !crash:
-				rotation += rotation_direction * rotational_acceleration(rotation_speed, max_rotational_velocity, delta) * delta
+				rotation += rotation_direction * rotational_acceleration(rotation_velocity, max_rotational_velocity, delta) * delta
 			else:
-				rotation += rotation_direction * rotational_acceleration(rotation_speed, max_rotational_velocity * crash_coeff, delta) * delta
+				rotation += rotation_direction * rotational_acceleration(rotation_velocity, max_rotational_velocity * crash_coeff, delta) * delta
 		else: # start slowing down until back to basic speed
-			if rotation_speed > ROTATION_SPEED_STOP:
-				rotation += rotation_before_stop * rotational_deceleration(rotation_speed, delta) * delta
+			if rotation_velocity > ROTATION_STOP:
+				rotation += rotation_before_stop * rotational_deceleration(rotation_velocity, delta) * delta
 			else:
 				rotation_direction_change = false
 	else: # continue movement of rotation when no input
-		if rotation_speed > ROTATION_SPEED_STOP:
-			rotation += last_rotation_direction * rotational_deceleration(rotation_speed, delta) * delta
+		if rotation_velocity > 0.0:
+			rotation += last_rotation_direction * rotational_deceleration(rotation_velocity, delta) * delta
 	movement_direction = Vector2.from_angle(rotation)
 
-#	print(rotation_speed)
-#	print(rotation_direction)
-#	print(rotation_direction_change)
+	#print(rotation_velocity) # debug
 
 func rotational_acceleration(curr_vel, max_velocity, delta):
 	if curr_vel > max_velocity:
 		return max_velocity
 	else:
-		rotation_speed = curr_vel + rotation_speed * delta
+		rotation_velocity = curr_vel + (acceleration / 200) * delta
 		return curr_vel
 		
 func rotational_deceleration(curr_vel, delta):
-	rotation_speed = curr_vel - rotation_speed * delta
+	rotation_velocity = curr_vel - (deceleration / 200) * delta
 	return curr_vel
 	
 func create_cfg():
@@ -189,7 +193,7 @@ func recalculate_parameters():
 	max_speed = config.get_value("Ship_Parameters", "max_speed") / weight
 	acceleration = config.get_value("Ship_Parameters", "acceleration") / weight
 	deceleration = config.get_value("Ship_Parameters", "deceleration") / weight
-	rotation_speed = config.get_value("Ship_Parameters", "rotation_speed")
+	rotation_speed = config.get_value("Ship_Parameters", "rotation_speed") / weight
 	friction = config.get_value("Ship_Parameters", "friction") * weight
 	max_rotational_velocity = config.get_value("Ship_Parameters", "max_rotational_velocity") / weight
 
