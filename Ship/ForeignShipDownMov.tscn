@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://qqeu7clwwhmg"]
+
+[ext_resource type="Script" path="res://Ship/ForeignShipDownMov.gd" id="1_lpcfx"]
+[ext_resource type="Texture2D" uid="uid://2naikq6vstae" path="res://Ship/ship (5).png" id="2_mrwds"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gg2e7"]
+size = Vector2(35.75, 104.706)
+
+[node name="ForeignShip" type="CharacterBody2D"]
+rotation = 1.5708
+motion_mode = 1
+script = ExtResource("1_lpcfx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 1.5708
+scale = Vector2(0.727273, 0.85)
+texture = ExtResource("2_mrwds")
+flip_v = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.5, 6.55671e-08)
+rotation = 1.5708
+scale = Vector2(0.727273, 0.85)
+shape = SubResource("RectangleShape2D_gg2e7")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.001
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

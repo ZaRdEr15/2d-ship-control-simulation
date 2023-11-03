@@ -1,18 +1,20 @@
-[gd_scene load_steps=13 format=3 uid="uid://c6hln7gwll4gm"]
+[gd_scene load_steps=15 format=3 uid="uid://c6hln7gwll4gm"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_jttjc"]
 [ext_resource type="Script" path="res://Server.gd" id="2_wkuhp"]
 [ext_resource type="Texture2D" uid="uid://clltpiiwq0rjy" path="res://Ship/tiles_sheet.png" id="3_1p8b7"]
 [ext_resource type="PackedScene" uid="uid://2ny0y48pn0s3" path="res://Ship/Ship.tscn" id="3_l1whv"]
-[ext_resource type="PackedScene" uid="uid://qqeu7clwwhmg" path="res://Ship/ForeignShip.tscn" id="3_shqxb"]
 [ext_resource type="Script" path="res://TileMap.gd" id="5_nerqa"]
+[ext_resource type="PackedScene" uid="uid://qqeu7clwwhmg" path="res://Ship/ForeignShipDownMov.tscn" id="5_xibeq"]
+[ext_resource type="PackedScene" uid="uid://cueo8c25wg6t7" path="res://Ship/ForeignShipSquareMov.tscn" id="6_1vhlu"]
 [ext_resource type="Script" path="res://ShipParameters.gd" id="6_luts5"]
+[ext_resource type="PackedScene" uid="uid://hpmbje8sm4jm" path="res://Ship/ForeignShipDiagonalUpMov.tscn" id="7_jfiex"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_8lfdi"]
 tile_data = PackedInt32Array(1245184, 1572864, 0, 1507328, 1572864, 8, 1769472, 1572864, 4, 2031616, 1835008, 4, 2293760, 1572864, 4, 2555904, 1572864, 8, 2818048, 1572864, 4, 524290, 262144, 12, 1245188, 1835008, 0, 1507332, 1572864, 4, 1769476, 1835008, 4, 2031620, 1835008, 8, 2293764, 1835008, 8, 2555908, 1572864, 8, 2818052, 1835008, 4, 1245192, 1572864, 0, 1507336, 1572864, 4, 1769480, 1572864, 4, 2031624, 1572864, 4, 2293768, 1572864, 4, 2555912, 1572864, 8, 2818056, 1572864, 4, 1245196, 1835008, 0, 1507340, 1835008, 4, 1769484, 1835008, 8, 2031628, 1835008, 4, 2293772, 1835008, 4, 2555916, 1835008, 8, 2818060, 1572864, 8, 1245200, 2097152, 0, 1507344, 2097152, 4, 1769488, 2097152, 4, 2031632, 2097152, 4, 2293776, 2097152, 8, 2555920, 2097152, 4, 2818064, 2097152, 8, 17, 1310720, 8, 262161, 1310720, 4, 524305, 1310720, 8, 786449, 1310720, 12, 2424852, 262144, 12, 21, 1572864, 8, 262165, 1572864, 8, 458773, 1835008, 4, 524309, 1572864, 8, 786453, 1572864, 12, 25, 1572864, 8, 262169, 1572864, 8, 524313, 1572864, 8, 786457, 1572864, 12, 393242, 1835008, 8, 65564, 1572864, 8, 29, 1572864, 8, 65565, 1835008, 8, 262173, 1572864, 8, 524317, 1572864, 8, 786461, 1572864, 12, 393248, 1572864, 8, 2162720, 0, 12, 33, 1572864, 8, 262177, 1572864, 8, 524321, 1572864, 8, 786465, 1835008, 12, 37, 1572864, 8, 262181, 1572864, 8, 524325, 1572864, 8, 786469, 1572864, 12, 458792, 1835008, 4, 2424872, 262144, 12, 41, 1572864, 8, 262185, 1572864, 8, 524329, 1572864, 8, 786473, 1835008, 12, 1835052, 262144, 12, 45, 1572864, 8, 262189, 1572864, 8, 458797, 1835008, 4, 524333, 1572864, 8, 786477, 1572864, 12, 1310768, 0, 12, 49, 1572864, 8, 262193, 1572864, 8, 524337, 1572864, 8, 786481, 1835008, 12, 2293810, 0, 12, 53, 2097152, 8, 262197, 2097152, 4, 524341, 2097152, 4, 786485, 2097152, 12, 1703992, 524288, 12, 2490427, 262144, 12, 1376318, 0, 12, 458815, 0, 12, 2162752, 0, 12, 720966, 524288, 12)
 
-[sub_resource type="TileMapPattern" id="TileMapPattern_liqqx"]
-tile_data = PackedInt32Array(0, 1, 65536, 1507328, 1, 65536, 2162688, 1, 65536)
+[sub_resource type="TileMapPattern" id="TileMapPattern_lf3bb"]
+tile_data = PackedInt32Array(0, 1, 65536, 3014690, 1, 262144, 327719, 1, 196608)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x6j4e"]
 texture = ExtResource("3_1p8b7")
@@ -282,14 +284,16 @@ texture = ExtResource("3_1p8b7")
 12:12/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_6u47n"]
-scenes/1/scene = ExtResource("3_shqxb")
+scenes/1/scene = ExtResource("5_xibeq")
+scenes/3/scene = ExtResource("6_1vhlu")
+scenes/4/scene = ExtResource("7_jfiex")
 
 [sub_resource type="TileSet" id="TileSet_jl0dq"]
 physics_layer_0/collision_layer = 3
 sources/0 = SubResource("TileSetAtlasSource_x6j4e")
 sources/1 = SubResource("TileSetScenesCollectionSource_6u47n")
 pattern_0 = SubResource("TileMapPattern_8lfdi")
-pattern_1 = SubResource("TileMapPattern_liqqx")
+pattern_1 = SubResource("TileMapPattern_lf3bb")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_jttjc")
@@ -299,60 +303,6 @@ script = ExtResource("2_wkuhp")
 
 [node name="Ship" parent="." instance=ExtResource("3_l1whv")]
 position = Vector2(545, 283)
-
-[node name="Wind" type="Label" parent="."]
-visible = false
-modulate = Color(0, 0, 0, 1)
-offset_left = 442.0
-offset_top = 4.0
-offset_right = 636.0
-offset_bottom = 30.0
-text = "Constant wind vector ON"
-
-[node name="Recording" type="Label" parent="."]
-visible = false
-modulate = Color(0, 0, 0, 1)
-offset_left = 500.0
-offset_top = 27.0
-offset_right = 540.0
-offset_bottom = 50.0
-text = "Recording..."
-
-[node name="Playback" type="Label" parent="."]
-visible = false
-modulate = Color(0, 0, 0, 1)
-offset_left = 500.0
-offset_top = 27.0
-offset_right = 610.0
-offset_bottom = 53.0
-text = "Playing back..."
-
-[node name="Help" type="Label" parent="."]
-modulate = Color(0, 0, 0, 1)
-offset_left = 6.0
-offset_top = 3.0
-offset_right = 252.0
-offset_bottom = 54.0
-text = "Press H to show/hide help"
-
-[node name="Guide" type="Label" parent="."]
-visible = false
-offset_left = 41.0
-offset_top = 37.0
-offset_right = 354.0
-offset_bottom = 271.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Arrow keys to control
-Up and down: forward/backward
-Left and right: rotation
-R key: reset ship position
-1: clear map
-2: obstacle map
-3: moving ships map
-Tab: toggle parameter sliders visibility
-O key: start/stop recording movement
-P key: play/stop movement from save file
-T key: toggle wind force"
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_jl0dq")
@@ -528,6 +478,60 @@ min_value = 1.0
 max_value = 2.2
 step = 0.1
 value = 1.0
+
+[node name="Wind" type="Label" parent="."]
+visible = false
+modulate = Color(0, 0, 0, 1)
+offset_left = 442.0
+offset_top = 4.0
+offset_right = 636.0
+offset_bottom = 30.0
+text = "Constant wind vector ON"
+
+[node name="Recording" type="Label" parent="."]
+visible = false
+modulate = Color(0, 0, 0, 1)
+offset_left = 500.0
+offset_top = 27.0
+offset_right = 540.0
+offset_bottom = 50.0
+text = "Recording..."
+
+[node name="Playback" type="Label" parent="."]
+visible = false
+modulate = Color(0, 0, 0, 1)
+offset_left = 500.0
+offset_top = 27.0
+offset_right = 610.0
+offset_bottom = 53.0
+text = "Playing back..."
+
+[node name="Help" type="Label" parent="."]
+modulate = Color(0, 0, 0, 1)
+offset_left = 6.0
+offset_top = 3.0
+offset_right = 252.0
+offset_bottom = 54.0
+text = "Press H to show/hide help"
+
+[node name="Guide" type="Label" parent="."]
+visible = false
+offset_left = 41.0
+offset_top = 37.0
+offset_right = 354.0
+offset_bottom = 271.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Arrow keys to control
+Up and down: forward/backward
+Left and right: rotation
+R key: reset ship position
+1: clear map
+2: obstacle map
+3: moving ships map
+Tab: toggle parameter sliders visibility
+O key: start/stop recording movement
+P key: play/stop movement from save file
+T key: toggle wind force"
 
 [connection signal="value_changed" from="ShipParameters/MaxSpeedSlider" to="Ship" method="_on_max_speed_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/AccelerationSlider" to="Ship" method="_on_acceleration_slider_value_changed"]
