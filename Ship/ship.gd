@@ -31,6 +31,8 @@ var last_rotation_direction = 0
 var rotation_direction_change = false
 var rotation_before_stop = 0
 
+const MAX_SAVE_SIZE = 3e+7
+
 var input_file : FileAccess
 var is_recording = false
 var is_playback = false
@@ -149,6 +151,13 @@ func record_input(input_matching, input1, input2):
 			0.0:
 				string = "NONE"
 		input_file.store_line(string)
+		if input_file.get_length() > MAX_SAVE_SIZE:
+			var main = get_parent()
+			main.record_pressed = false
+			var recording = main.get_node("Recording")
+			recording.visible = false
+			is_recording = false
+			input_file.close()
 		
 func playback_input(input1, input2):
 	var input = input_file.get_line()

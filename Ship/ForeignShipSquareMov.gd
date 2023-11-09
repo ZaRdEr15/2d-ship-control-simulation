@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 @export var max_speed = 2.0
 @export var starting_rotation = 0
-@export var restart_time = 5.5
-@export var ship_scale = 0.5
+@export var restart_time = 3
+@export var ship_scale = 0.75
 
 var rotate = false
 var initial_rot = 0
