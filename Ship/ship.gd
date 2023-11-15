@@ -18,8 +18,6 @@ var wind_vector = Vector2.ZERO
 
 var config = ConfigFile.new()
 
-signal end_of_file
-
 var calculated_velocity = Vector2.ZERO
 var movement_direction = Vector2.ZERO # Initial direction where ship is positioned
 var crash = false
@@ -46,7 +44,6 @@ func _ready():
 	var emitter = get_parent() # Main node
 	emitter.record_input.connect(_on_record_pressed)
 	emitter.playback_input.connect(_on_playback_pressed)
-	end_of_file.connect(_on_end_of_file_reached)
 
 func _physics_process(delta):
 	ship_movement(delta)
@@ -82,7 +79,7 @@ func ship_rotation(delta):
 	record_input(rotation_direction, "RIGHT", "LEFT")
 	if is_playback:
 		if input_file.eof_reached():
-			emit_signal("end_of_file")
+			end_of_file_reached()
 		else:
 			rotation_direction = playback_input("RIGHT", "LEFT")
 	if rotation_direction:
@@ -190,7 +187,7 @@ func _on_playback_pressed():
 		# Close file
 		input_file.close()
 		
-func _on_end_of_file_reached():
+func end_of_file_reached():
 	input_file.close()
 	is_playback = false
 	var label = get_parent().get_node("Playback")

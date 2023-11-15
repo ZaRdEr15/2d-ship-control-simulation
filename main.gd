@@ -9,12 +9,13 @@ var playback_pressed = false
 
 var is_wind_active = false
 
+func _ready():
+	var emitter = $TileMap
+	emitter.map_switched.connect(reset_ship_position)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if Input.is_action_just_pressed("restart_position") or\
-	Input.is_action_just_pressed("switch_map_1") or\
-	Input.is_action_just_pressed("switch_map_2") or\
-	Input.is_action_just_pressed("switch_map_3"):
+	if Input.is_action_just_pressed("restart_position"):
 		reset_ship_position()
 	elif Input.is_action_just_pressed("hide_help"):
 		$Guide.visible = !$Guide.visible

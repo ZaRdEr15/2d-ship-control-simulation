@@ -384,29 +384,6 @@ max_value = 500.0
 step = 10.0
 scrollable = false
 
-[node name="RotationSpeed" type="Label" parent="ShipParameters"]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 0
-offset_left = 90.0
-offset_top = 143.0
-offset_right = 207.0
-offset_bottom = 169.0
-text = "Rotation speed (REMOVE!)"
-horizontal_alignment = 1
-
-[node name="RotationSpeedSlider" type="HSlider" parent="ShipParameters"]
-layout_mode = 0
-offset_left = 25.0
-offset_top = 165.0
-offset_right = 255.0
-offset_bottom = 188.0
-focus_mode = 0
-min_value = 0.01
-max_value = 1.0
-step = 0.01
-value = 0.01
-scrollable = false
-
 [node name="Friction" type="Label" parent="ShipParameters"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
@@ -514,23 +491,63 @@ offset_top = 37.0
 offset_right = 354.0
 offset_bottom = 271.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Arrow keys to control
-Up and down: forward/backward
-Left and right: rotation
-R key: reset ship position
-1: clear map
-2: obstacle map
-3: moving ships map
+text = "Up and down arrow keys: forward/backward
+Left and right arrow keys: rotation
+'R' key: reset ship position
 Tab: toggle parameter sliders visibility
-O key: start/stop recording movement
-P key: play/stop movement from save file
-T key: toggle wind force"
+'O' key: start/stop recording movement
+'P' key: play/stop movement from save file
+'T' key: toggle wind force"
+
+[node name="MapSelection" type="Control" parent="."]
+z_index = 1
+layout_mode = 3
+anchors_preset = 0
+offset_left = 465.0
+offset_top = 443.0
+offset_right = 505.0
+offset_bottom = 483.0
+
+[node name="PreviousMapButton" type="Button" parent="MapSelection"]
+layout_mode = 0
+offset_left = -78.0
+offset_top = 112.0
+offset_right = -47.0
+offset_bottom = 143.0
+text = "<<"
+
+[node name="NextMapButton" type="Button" parent="MapSelection"]
+layout_mode = 0
+offset_left = 236.0
+offset_top = 112.0
+offset_right = 267.0
+offset_bottom = 143.0
+text = ">>"
+
+[node name="MapLabel" type="Label" parent="MapSelection"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 37.0
+offset_top = 164.0
+offset_right = 136.0
+offset_bottom = 190.0
+text = "Current map"
+
+[node name="CurrentMapName" type="Label" parent="MapSelection"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 20.0
+offset_top = 115.0
+offset_right = 60.0
+offset_bottom = 141.0
+text = "Map"
 
 [connection signal="value_changed" from="ShipParameters/MaxSpeedSlider" to="Ship" method="_on_max_speed_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/AccelerationSlider" to="Ship" method="_on_acceleration_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/DecelerationSlider" to="Ship" method="_on_deceleration_slider_value_changed"]
-[connection signal="value_changed" from="ShipParameters/RotationSpeedSlider" to="Ship" method="_on_rotation_speed_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/FrictionSlider" to="Ship" method="_on_friction_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/MaxRotationalVelocitySlider" to="Ship" method="_on_max_rotational_velocity_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/WeightSlider" to="." method="_on_weight_slider_value_changed"]
 [connection signal="value_changed" from="ShipParameters/WeightSlider" to="Ship" method="_on_weight_slider_value_changed"]
+[connection signal="pressed" from="MapSelection/PreviousMapButton" to="TileMap" method="_on_previous_map_button_pressed"]
+[connection signal="pressed" from="MapSelection/NextMapButton" to="TileMap" method="_on_next_map_button_pressed"]
