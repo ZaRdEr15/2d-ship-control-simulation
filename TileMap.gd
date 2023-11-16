@@ -11,7 +11,7 @@ signal clear_foreign_ships
 signal map_switched
 
 func _ready():
-	map_label = get_node("../MapSelection/CurrentMapName")
+	map_label = get_node("../GUI/MapSelection/CurrentMapName")
 	map_label.text = maps[curr_idx] + " Map"
 
 func switch_map(map):

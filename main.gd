@@ -18,21 +18,21 @@ func _process(_delta):
 	if Input.is_action_just_pressed("restart_position"):
 		reset_ship_position()
 	elif Input.is_action_just_pressed("hide_help"):
-		$Guide.visible = !$Guide.visible
+		$GUI/Guide.visible = !$GUI/Guide.visible
 	elif Input.is_action_just_pressed("show_ship_parameters"):
-		$ShipParameters.visible = !$ShipParameters.visible
+		$GUI/ShipParameters.visible = !$GUI/ShipParameters.visible
 	elif Input.is_action_just_pressed("record_input") and playback_pressed != true:
 		record_pressed = !record_pressed
 		$Ship.is_recording = !$Ship.is_recording
-		$Recording.visible = !$Recording.visible
+		$GUI/Recording.visible = !$GUI/Recording.visible
 		emit_signal("record_input")
 	elif Input.is_action_just_pressed("playback_input") and record_pressed != true:
 		playback_pressed = true
 		$Ship.is_playback = !$Ship.is_playback
-		$Playback.visible = !$Playback.visible
+		$GUI/Playback.visible = !$GUI/Playback.visible
 		emit_signal("playback_input")
 	elif Input.is_action_just_pressed("toggle_wind"):
-		$Wind.visible = !$Wind.visible
+		$GUI/Wind.visible = !$GUI/Wind.visible
 		if is_wind_active:
 			$Ship.wind_vector = Vector2.ZERO
 		else:
