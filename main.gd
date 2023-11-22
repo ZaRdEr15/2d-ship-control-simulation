@@ -3,7 +3,7 @@ extends Node2D
 signal record_input
 signal playback_input
 
-var starting_position = Vector2(545, 283)
+var starting_position = Vector2(1285, 794)
 var record_pressed = false
 var playback_pressed = false
 

@@ -10,7 +10,7 @@ var foreign_ship_v3 = preload("res://Ship/ForeignShipDiagonalUpMov.tscn")
 # Declare new foreign ships types here...
 
 # Foreign ships dict, their corresponding position on the map and type of foreing ship
-var ships = {Vector2(100, -40): "1", Vector2(600, 1): "2", Vector2(500, 700): "3", Vector2(180, -40): "1"}
+var ships = {Vector2(550, 50): "1", Vector2(1600, 200): "2", Vector2(1100, 1350): "3", Vector2(790, 50): "1"}
 
 # New foreign ships dict, keeps track of dynamically created ships
 # Keys are indexes, values are ship references

@@ -17,11 +17,9 @@ func _ready():
 func switch_map(map):
 	emit_signal("map_switched")
 	clear_layer(1)
-	match map:
-		"Static objects":
-			set_pattern(1, Vector2i(0, 0), tile_set.get_pattern(0))
-		"Dynamic objects":
-			emit_signal("add_foreign_ships")
+	set_pattern(1, Vector2i.ZERO, tile_set.get_pattern(curr_idx))
+	if map == "Dynamic objects":
+		emit_signal("add_foreign_ships")
 	map_label.text = maps[curr_idx] + " Map"
 
 func _on_previous_map_button_pressed():
