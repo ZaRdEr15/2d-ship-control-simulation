@@ -190,7 +190,7 @@ func _on_playback_pressed():
 func end_of_file_reached():
 	input_file.close()
 	is_playback = false
-	var label = get_parent().get_node("Playback")
+	var label = get_node("../GUI/Playback")
 	label.visible = false
 	var main = get_parent()
 	main.playback_pressed = false

@@ -14,6 +14,8 @@ var ships = {Vector2(550, 50): "1", Vector2(1600, 200): "2", Vector2(1100, 1350)
 
 # New foreign ships dict, keeps track of dynamically created ships
 # Keys are indexes, values are ship references
+
+var foreign_ship_vX = preload("res://Ship/ForeignShipObject.tscn")
 var new_ships = {}
 var new_ships_key = 0
 
@@ -23,31 +25,36 @@ func _ready():
 	var emitter = get_parent().get_node("TileMap")
 	emitter.add_foreign_ships.connect(_on_add_foreign_ships)
 	emitter.clear_foreign_ships.connect(_on_clear_foreign_ships)
+	emitter.add_tilgu_ships.connect(_on_add_tilgu_ships)
 
 func _on_add_foreign_ships():
-	if !get_children():
-			for ship_pos in ships.keys():
-				var ship = ships[ship_pos]
-				var string_for_instance = START_STRING + ship + ".instantiate()"
-				expression.parse(string_for_instance)
-				var foreign_ship_instance = expression.execute([], self)
-				foreign_ship_instance.position = ship_pos
-				add_child(foreign_ship_instance)
-#	else: # Testing purposes
+	for ship_pos in ships.keys():
+		var ship = ships[ship_pos]
+		var string_for_instance = START_STRING + ship + ".instantiate()"
+		expression.parse(string_for_instance)
+		var foreign_ship_instance = expression.execute([], self)
+		foreign_ship_instance.position = ship_pos
+		add_child(foreign_ship_instance)
 #		add_new_foreign_ship(1.0, 90, 5.0, 1, Vector2(-100, 350))
 
 func _on_clear_foreign_ships():
 	for object in get_children():
 			object.queue_free()
+	if new_ships.is_empty() != true:
+		new_ships.clear
+		new_ships_key = 0
 	#print(new_ships) # Testing purposes
+	
+func _on_add_tilgu_ships():
+	pass # ADD FROM THE NEW_FOREIGN_SHIP SHIPS ADDING
 		
 func add_new_foreign_ship(speed, starting_rotation_deg, reset_time_s, scale, position):
-	var new_foreign_ship = load("res://Ship/ForeignShipObject.tscn").instantiate()
+	var new_foreign_ship = foreign_ship_vX.instantiate()
 	var foreign_ship_object = new_foreign_ship.init(speed, starting_rotation_deg, reset_time_s, scale, position)
 	add_child(foreign_ship_object)
 	new_ships[new_ships_key] = foreign_ship_object
 	new_ships_key += 1
-	remove_new_foreign_ship(0)
+	#remove_new_foreign_ship(0) # Testing purposes
 	return foreign_ship_object
 	
 func remove_new_foreign_ship(idx):
