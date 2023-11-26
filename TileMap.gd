@@ -27,15 +27,15 @@ func switch_map(map):
 	map_label.text = maps[curr_idx] + " Map"
 
 func _on_previous_map_button_pressed():
-	emit_signal("clear_foreign_ships")
 	if curr_idx == 0:
 		return
+	emit_signal("clear_foreign_ships")
 	curr_idx -= 1
 	switch_map(maps[curr_idx])
 
 func _on_next_map_button_pressed():
-	emit_signal("clear_foreign_ships")
 	if curr_idx == (n_maps - 1):
 		return
+	emit_signal("clear_foreign_ships")
 	curr_idx += 1
 	switch_map(maps[curr_idx])

@@ -41,12 +41,14 @@ func _on_clear_foreign_ships():
 	for object in get_children():
 			object.queue_free()
 	if new_ships.is_empty() != true:
-		new_ships.clear
+		new_ships.clear()
 		new_ships_key = 0
 	#print(new_ships) # Testing purposes
 	
 func _on_add_tilgu_ships():
-	pass # ADD FROM THE NEW_FOREIGN_SHIP SHIPS ADDING
+	add_new_foreign_ship(1.0, 90, 5.8, 0.80, Vector2(420, 280))
+	add_new_foreign_ship(1.3, 180, 17, 1.1, Vector2(2200, 450))
+	add_new_foreign_ship(0.5, 0, 16, 1.25, Vector2(300, 1050))
 		
 func add_new_foreign_ship(speed, starting_rotation_deg, reset_time_s, scale, position):
 	var new_foreign_ship = foreign_ship_vX.instantiate()
